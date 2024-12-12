@@ -98,7 +98,7 @@ const guardar = async (req, res) => {
     }
 
     //Crear registro
-    const { titulo, descripcion, habitaciones, estacionamiento, wc, calle, lat, lng, precio: precioID, categoria: categoriaID } = req.body
+    const { titulo, descripcion, habitaciones, estacionamiento, wc, calle, lat, lng, precio: precioID, categoria: categoriaID,transaccion } = req.body
 
     const { id: usuarioID } = req.usuario
     try {
@@ -113,6 +113,7 @@ const guardar = async (req, res) => {
             lng,
             precioID,
             categoriaID,
+            transaccion,
             usuarioID,
             imagen: ''
         })
