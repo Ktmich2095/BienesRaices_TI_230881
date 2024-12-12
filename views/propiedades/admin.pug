@@ -26,6 +26,10 @@ block contenido
                                         </svg>
                                         = propiedad.precio.nombre
 
+                                    if (propiedad.transaccion)
+                                      p(class="text-sm text-gray-600 font-bold")= propiedad.transaccion
+                                      
+
                                     a(href=`/mensajes/${propiedad.id}` class="text-sm text-gray-600")= `${propiedad.mensajes.length} Mensajes` 
 
                                 div(class="sm:w-1/4 md:w-2/6 lg:w-1/6 flex flex-col  2xl:flex-row gap-2")
