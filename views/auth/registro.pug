@@ -1,0 +1,67 @@
+extends ../layout/index
+
+block contenido
+    .min-h-screen.flex.items-center.justify-center
+        div(class="container mx-auto max-w-4xl grid grid-cols-1 md:grid-cols-2 shadow-xl rounded-lg overflow-hidden")
+            // Sección izquierda con imagen y bienvenida
+            div(class="hidden md:block bg-cover bg-center" style="background-image: url('/img/registro.jpg');")
+                .p-10.text-customWhite.text-center.flex.flex-col.h-full.mb
+                    h1.text-4xl.my-5.font-extrabold.text-center.text-white Bienes
+                        span.font-normal.text-white Raíces
+                    
+
+            // Sección derecha con el formulario
+            .bg-customWhite.p-8
+                h2.text-center.text-2xl.font-extrabold.text-midnightGreen= pagina
+                if errores
+                    div(class="max-w-md mx-auto my-5 errores-container items-container")
+                        each error in errores
+                            div.flex.items-center.bg-red-600.text-customWhite.uppercase.text-xs.text-center.p-3.mb-3.font-bold.rounded-lg.shadow-lg.transition-opacity.opacity-100
+                                img(src="/img/advertencia.png" alt="Advertencia" class="w-6 h-6 mr-2")
+                                p= error.msg
+
+                form.space-y-6(method="POST" action="/auth/registro" noValidate)
+                    input(type="hidden" name="_csrf" value=csrfToken)
+                    div
+                        label.block.text-sm.font-bold.text-midnightGreen.mb-2(for="nombre") Nombre completo
+                        input#name.w-full.px-4.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="Tu nombre" type="text" name="nombre" value= usuario ? usuario.nombre : '')
+
+                    div
+                        label.block.text-sm.font-bold.text-midnightGreen.mb-2(for="email") Email de registro 
+                        input#email.w-full.px-4.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="ej: user@example.com" type="email" name="email" value= usuario ? usuario.email : '')
+
+                    div
+                        label.block.text-sm.font-bold.text-midnightGreen.mb-2(for="birthDate") Fecha de nacimiento
+                        input#birthDate.w-full.px-4.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(type="date" name="birthDate" required value= usuario && usuario.birthDate ? usuario.birthDate : '')
+
+                    div
+                        label.block.text-sm.font-bold.text-midnightGreen.mb-2(for="password") Password
+                        input#password.w-full.px-4.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="Mínimo de 8 caracteres" type="password" name="password")
+
+                    div
+                        label.block.text-sm.font-bold.text-midnightGreen.mb-2(for="repetir_password") Repite tu password
+                        input#repetir_password.w-full.px-4.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="Igual que la anterior" type="password" name="repetir_password")
+
+                    div.flex.items-center.justify-between.text-sm
+                        a(class="text-midnightGreen hover:underline" href="/auth/login") ¿Ya tienes cuenta? Inicia sesión
+                        a(class="text-midnightGreen hover:underline" href="/auth/olvide-password") Olvidé mi password
+
+                    input(class="w-full bg-cerulean hover:bg-midnightGreen text-customWhite font-bold py-3 cursor-pointer rounded-md" type="submit" value="Crear Cuenta")
+
+    // Script para ocultar los errores automáticamente
+    script.
+        document.addEventListener('DOMContentLoaded', () => {
+            const errorItems = document.querySelectorAll('.errores-container div');
+            errorItems.forEach((error, index) => {
+                // Inicia el desvanecimiento tras 4 segundos 
+                setTimeout(() => {
+                    error.style.transition = 'opacity 3s ease';
+                    error.style.opacity = '0'; // Aplica el desvanecimiento
+                }, 3000 + index * 2000); // Diferencia entre errores
+
+                // Elimina completamente el elemento después del desvanecimiento
+                setTimeout(() => {
+                    error.remove();
+                }, 6000 + index * 2000); // Aumenta el tiempo de eliminación según el índice
+            });
+        });
