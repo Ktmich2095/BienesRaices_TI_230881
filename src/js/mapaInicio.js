@@ -1,14 +1,13 @@
 
 (function () {
     const lat = 20.18397099876656;
-    
+
     const lng = -98.06376224560663;
     const mapa = L.map('mapa-inicio').setView([lat, lng], 17);
 
     let markers = new L.FeatureGroup().addTo(mapa)
     let propiedades = [];
     //Filtros
-
     const filtros = {
         categoria: '',
         precio: ''
