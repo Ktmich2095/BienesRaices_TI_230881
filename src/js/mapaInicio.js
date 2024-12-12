@@ -12,7 +12,6 @@
         categoria: '',
         precio: ''
     }
-
     const categoriasSelect = document.querySelector('#categorias');
     const preciosSelect = document.querySelector('#precios');
 
