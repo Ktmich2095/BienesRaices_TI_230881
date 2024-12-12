@@ -1,0 +1,40 @@
+extends ../layout/index
+
+block contenido
+    .min-h-screen.flex.items-center.justify-center
+        div(class="container mx-auto max-w-4xl grid grid-cols-1 md:grid-cols-2 shadow-xl rounded-lg overflow-hidden")
+        
+            // Sección izquierda con imagen
+            div(class="hidden md:block bg-cover bg-center" style="background-image: url('/img/fondo.jpg');")
+                .p-10.text-customWhite.text-center.flex.flex-col.justify-center.h-full
+                    h1.text-4xl.font-extrabold.text-white Bienvenido de nuevo
+                    p.mt-4.text-sm.leading-relaxed.text-white ¡Ingresa tus datos para iniciar sesión y explorar nuestras propiedades!
+
+            // Sección derecha con el formulario
+            .bg-customWhite.p-8
+                h2.text-center.text-2xl.font-extrabold.text-midnightGreen= pagina
+                
+                // Aquí movemos los errores fuera del formulario, justo antes
+                if errores
+                    div(class="max-w-md mx-auto my-5 errores-container items-container")
+                        each error in errores
+                            div.flex.items-center.bg-red-600.text-customWhite.uppercase.text-xs.text-center.p-3.mb-3.font-bold.rounded-lg.shadow-lg.transition-opacity.opacity-100
+                                img(src="/img/advertencia.png" alt="Advertencia" class="w-6 h-6 mr-2")
+                                p= error.msg
+                
+                .mt-8.mx-auto.max-w-md
+                    form.space-y-5(method="POST" action="/auth/login" noValidate)
+                        input(type="hidden" name="_csrf" value=csrfToken)
+                        div 
+                            label.block.text-sm.uppercase.text-midnightGreen.mb-2.font-bold(for="email") Correo electrónico
+                            input#email.w-full.px-3.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="ej: usuario@dominio.com" type="email" name="email")  
+                        
+                        div 
+                            label.block.text-sm.uppercase.text-midnightGreen.mb-2.font-bold(for="password") Contraseña
+                            input#password.w-full.px-3.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="Mínimo de 8 caracteres" type="password" name="password") 
+
+                        .flex.items-center.justify-between.text-sm
+                            a.text-midnightGreen.text-xs(href="/auth/registro" class="hover:underline hover:decoration-cerulean") ¿No tienes una cuenta? Crea una 
+                            a.text-midnightGreen.text-xs(href="/auth/olvide-password" class="hover:underline hover:decoration-cerulean") Olvidé mi password 
+
+                        input(class="w-full bg-cerulean hover:bg-midnightGreen text-customWhite font-bold py-3 cursor-pointer mt-5 rounded-lg" type="submit" value="Iniciar Sesión")
