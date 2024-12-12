@@ -1,6 +1,7 @@
 
 (function () {
     const lat = 20.18397099876656;
+    
     const lng = -98.06376224560663;
     const mapa = L.map('mapa-inicio').setView([lat, lng], 17);
 
