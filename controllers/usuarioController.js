@@ -86,11 +86,12 @@ const formularioRegistro = (req, res) => {
 
 const registrar = async (req, res) => {
     console.log(req.body)
-    const { nombre, email, password, birthDate,fotoPerfil=''  } = req.body;
+    const { nombre,alias, email, password, birthDate,fotoPerfil=''  } = req.body;
     //validación
     await check('nombre').notEmpty().withMessage('El nombre no puede ir vacio').run(req)
+    await check('alias').notEmpty().withMessage('El alias un campo obligatorio por seguridad').isLength({ min: 4 }).withMessage('El alias debe ser de al menos 4 caracteres').run(req)
     await check('email').isEmail().withMessage('Eso no parece un email').run(req)
-    await check('password').isLength({ min: 6 }).withMessage('El password debe ser de almenos 6 caracteres').run(req)
+    await check('password').isLength({ min: 6 }).withMessage('El password debe ser de al menos 6 caracteres').run(req)
     await check('repetir_password').equals(req.body.password).withMessage('Los password no coinciden').run(req)
     await check('birthDate').notEmpty().withMessage('La fecha de nacimiento no puede ir vacía').run(req);
     let resultado = validationResult(req)
@@ -104,9 +105,10 @@ const registrar = async (req, res) => {
         csrfToken: req.csrfToken(),
         errores: [{ msg: 'La fecha de nacimiento no es válida' }],
         usuario: {
-        nombre: req.body.nombre,
-        email: req.body.email,
-        birthDate: req.body.birthDate
+            nombre: req.body.nombre,
+            alias:req.body.alias,
+            email: req.body.email,
+            birthDate: req.body.birthDate
         }
     })
     }
@@ -117,8 +119,9 @@ const registrar = async (req, res) => {
             csrfToken: req.csrfToken(),
             page: 'Crear Cuenta',
             errores: [{ msg: 'Debes tener al menos 18 años para registrarte.' }],
-            user: {
+            usuario: {
                 nombre: req.body.nombre,
+                alias:req.body.alias,
                 email: req.body.email,
                 birthDate: req.body.birthDate,  
             }
@@ -133,13 +136,27 @@ const registrar = async (req, res) => {
             errores: resultado.array(),
             usuario: {
                 nombre: req.body.nombre,
+                alias:req.body.alias,
                 email: req.body.email,
                 birthDate: req.body.birthDate
             }
         })
     }
 
-    //Extraer los datos
+    const aliasExistente = await Usuario.findOne({where:{alias}})
+    if(aliasExistente){
+        return res.render('auth/registro',{
+            pagina:'Crear cuenta',
+            csrfToken:csrfToken(),
+            errores:[{msg:'Ese alias ya existe'}],
+            usuario:{
+                nombre:req.body.nombre,
+                alias:req.body.alias,
+                email:req.body.email,
+                birthDate:req.body.birthDate
+            }
+        })
+    }
     
 
 
@@ -153,6 +170,7 @@ const registrar = async (req, res) => {
             errores: [{ msg: 'El usuario ya esta Registrado' }],
             usuario: {
                 nombre: req.body.nombre,
+                alias:req.body.alias,
                 email: req.body.email,
                 birthDate: req.body.birthDate
             }
@@ -162,6 +180,7 @@ const registrar = async (req, res) => {
     //Almacenar un usuario
     const usuario = await Usuario.create({
         nombre,
+        alias,
         email,
         password,
         birthDate,

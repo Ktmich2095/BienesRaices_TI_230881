@@ -7,7 +7,7 @@ block contenido
     div.py-10
         h1.text-4xl.my-10.font-extrabold.text-center Bienes
             span.font-normal Raíces  
-        h2.text-center.text-2xl.font-extrabold= pagina
+        h2.text-center.text-2xl= pagina
 
         if errores 
             div(class="max-w-md mx-auto my-10")
@@ -31,18 +31,18 @@ block contenido
                         textarea#descripcion.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Descripcion de la propiedad" name="descripcion")= datos.descripcion ? datos.descripcion : ''
 
                     div(class="md:flex md:gap-4 space-y-5 md:space-y-0")
-                        div(class="md:w-1/2") 
+                        div(class="md:w-1/3") 
                             label.block.text-sm.uppercase.text-gray-500.mb-3.font-bold(for="categoria") Categoria
                             select#categoria.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="categoria")     
                                 option(value="") - Seleccione -
                                 each categoria in categorias 
                                     option(value=categoria.id selected= datos.categoria ? datos.categoria == categoria.id ? true : false : null )= categoria.nombre
-                        div#transaccion-field(class="hidden") 
+                        div(class="md:w-1/3") 
                             label.block.text-sm.uppercase.text-gray-500.mb-3.font-bold(for="transaccion") ¿Renta o Venta?
                             select#transaccion.w-full.px-5.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="transaccion")
                                 option(value="Venta" selected= datos.transaccion ? datos.transaccion === 'Venta' : null) Venta
                                 option(value="Renta" selected= datos.transaccion ? datos.transaccion === 'Renta' : null) Renta
-                        div(class="md:w-1/2") 
+                        div(class="md:w-1/3") 
                             label.block.text-sm.uppercase.text-gray-500.mb-3.font-bold(for="precio") Precio
                             select#precio.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="precio")     
                                 option(value="") - Seleccione -

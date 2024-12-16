@@ -12,7 +12,7 @@ block contenido
 
             // Sección derecha con el formulario
             .bg-customWhite.p-8
-                h2.text-center.text-2xl.font-extrabold.text-midnightGreen= pagina
+                h2.text-center.text-2xl= pagina
                 if errores
                     div(class="max-w-md mx-auto my-5 errores-container items-container")
                         each error in errores
@@ -24,8 +24,10 @@ block contenido
                     input(type="hidden" name="_csrf" value=csrfToken)
                     div
                         label.block.text-sm.font-bold.text-midnightGreen.mb-2(for="nombre") Nombre completo
-                        input#name.w-full.px-4.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="Tu nombre" type="text" name="nombre" value= usuario ? usuario.nombre : '')
-
+                        input#nombre.w-full.px-4.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="Tu nombre" type="text" name="nombre" value= usuario ? usuario.nombre : '')
+                    div
+                        label.block.text-sm.font-bold.text-midnightGreen.mb-2(for="alias") Alias de usuario
+                        input#alias.w-full.px-4.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="Alias único" type="text" name="alias" value= usuario ? usuario.alias : '')
                     div
                         label.block.text-sm.font-bold.text-midnightGreen.mb-2(for="email") Email de registro 
                         input#email.w-full.px-4.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="ej: user@example.com" type="email" name="email" value= usuario ? usuario.email : '')
