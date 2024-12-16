@@ -27,6 +27,7 @@ const Usuario = db.define('usuarios', {
     token: {
         type: DataTypes.STRING
     },
+    
     confirmado: DataTypes.BOOLEAN
 }, {
     hooks: {
