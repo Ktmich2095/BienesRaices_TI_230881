@@ -1073,6 +1073,11 @@ video {
   background-color: rgb(19 80 91 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-cerulean:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(12 116 137 / var(--tw-bg-opacity));
+}
+
 .hover\:underline:hover {
   text-decoration-line: underline;
 }
