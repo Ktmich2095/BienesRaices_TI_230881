@@ -452,7 +452,6 @@ const verMisMensajes = async (req, res) => {
                     model:Usuario,
                     as:'usuario',
                     attributes:['alias','fotoPerfil']
-                    
                 }
             ],
         });
