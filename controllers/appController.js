@@ -49,6 +49,7 @@ const inicio = async (req, res) => {
     ])
     
 
+    
     res.render('inicio', {
         pagina: 'Inicio',
         categorias,
