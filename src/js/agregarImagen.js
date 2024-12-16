@@ -22,6 +22,7 @@ Dropzone.options.imagen = {
             dropzone.processQueue()
         })
 
+        
         dropzone.on('queuecomplete', function(){
             if (dropzone.getActiveFiles().length === 0) {
                 const context = dropzone.element.getAttribute('data-context');
