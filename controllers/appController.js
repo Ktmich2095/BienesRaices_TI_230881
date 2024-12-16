@@ -79,7 +79,12 @@ const categoria = async (req, res) => {
             categoriaID: id
         },
         include: [
-            {model: Precio, as: 'precio'}
+            {model: Precio, as: 'precio'},
+            {
+                model: Usuario,
+                as: 'usuario',
+                attributes: ['fotoPerfil', 'alias'], // Incluye sólo estos campos
+            },
         ]
     })
 
@@ -115,7 +120,12 @@ const buscador = async (req, res) => {
             }
         },
         include: [
-            {model: Precio , as: 'precio'}
+            {model: Precio , as: 'precio'},
+            {
+                model: Usuario,
+                as: 'usuario',
+                attributes: ['fotoPerfil', 'alias'], // Incluye sólo estos campos
+            },
         ]
     })
 

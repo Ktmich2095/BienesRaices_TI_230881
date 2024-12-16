@@ -13,12 +13,6 @@ block contenido
                     li(class="border-gray-200 border-b p-5 flex items-center space-x-4")
                         img(class="rounded-full w-14 h-14" src=`/uploads/${mensaje.usuario.fotoPerfil}` alt=`Foto de perfil del usuario ${mensaje.usuario.alias}`)
                         div(class="flex flex-col")  
-                            p(class="font-bold text-gray-800") Nombre: 
-                                span(class="font-normal")= mensaje.usuario.nombre
-                                
-                            p(class="font-bold text-gray-800") Email: 
-                                span(class="font-normal")= mensaje.usuario.email    
-
                             p(class="font-bold text-gray-800") Mensaje: 
                                 span(class="font-normal")= mensaje.mensaje
 
@@ -28,10 +22,10 @@ block contenido
                             div(class="mt-4")
                                 p(class="font-bold text-green-600") Respuesta:
                                 span(class="font-normal")= mensaje.respuesta
-                        else
-                            form(action=`/mensajes/responder/${mensaje.id}` method="POST" class="mt-4")
-                                input(type="hidden", name="_csrf", value=csrfToken)
-                                textarea(name="respuesta" rows="3" class="w-full border border-gray-300 rounded-lg p-2" placeholder="Escribe tu respuesta aquí...").required
-                                button(type="submit" class="bg-darkCyan text-white px-4 py-2 rounded mt-2") Responder
+                        else 
+                            div(class="mt-4")
+                                p(class="font-bold text-red-600") Sin respuesta
+        
+            
         else 
             p(class="text-center text-gray-600 p-5") No hay Mensajes   
