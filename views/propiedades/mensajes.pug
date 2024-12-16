@@ -10,18 +10,22 @@ block contenido
         if mensajes.length 
             ul 
                 each mensaje in mensajes 
-                    li(class="border-gray-200 border-b p-5")
-                        p(class="font-bold text-gray-800") Nombre: 
-                            span(class="font-normal")= mensaje.usuario.nombre
+                    li(class="border-gray-200 border-b p-5 flex items-center space-x-4")
+                        img(class="rounded-full w-14 h-14" src=`/uploads/${mensaje.usuario.fotoPerfil}` alt=`Foto de perfil del usuario ${mensaje.usuario.alias}`)
+                        div(class="flex flex-col")  
+                            p(class="font-bold text-gray-800") Nombre: 
+                                span(class="font-normal")= mensaje.usuario.nombre
+                                
+                            p(class="font-bold text-gray-800") Email: 
+                                span(class="font-normal")= mensaje.usuario.email    
 
+                            p(class="font-bold text-gray-800") Mensaje: 
+                                span(class="font-normal")= mensaje.mensaje
 
-                        p(class="font-bold text-gray-800") Email: 
-                            span(class="font-normal")= mensaje.usuario.email    
-
-                        p(class="font-bold text-gray-800") Mensaje: 
-                            span(class="font-normal")= mensaje.mensaje
-
-                        p(class="font-bold text-gray-800") Enviado: 
-                            span(class="font-normal")= formatearFecha( mensaje.createdAt )       
+                            p(class="font-bold text-gray-800") Enviado: 
+                                span(class="font-normal")= formatearFecha( mensaje.createdAt ) 
+                        div
+                            label.block.text-sm.font-bold.text-midnightGreen.mb-2(for="") Alias de usuario
+                            input#alias.w-full.px-4.py-2.border.border-midnightGreen.rounded-md.placeholder-gray-400(placeholder="Alias único" type="text" name="alias" value= usuario ? usuario.alias : '')    
         else 
             p(class="text-center text-gray-600 p-5") No hay Mensajes   
