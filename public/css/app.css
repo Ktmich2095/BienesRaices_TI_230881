@@ -793,6 +793,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(254 249 195 / var(--tw-bg-opacity));
 }
+.bg-darkCyan {
+  --tw-bg-opacity: 1;
+  background-color: rgb(17 157 164 / var(--tw-bg-opacity));
+}
 .bg-cover {
   background-size: cover;
 }
@@ -1067,6 +1071,11 @@ video {
 .hover\:bg-midnightGreen:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(19 80 91 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-cerulean:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(12 116 137 / var(--tw-bg-opacity));
 }
 
 .hover\:underline:hover {
