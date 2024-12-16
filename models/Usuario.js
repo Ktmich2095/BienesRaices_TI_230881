@@ -8,6 +8,10 @@ const Usuario = db.define('usuarios', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    alias: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     email: {
         type: DataTypes.STRING,
         allowNull: false

@@ -1,4 +1,4 @@
-import { Precio, Categoria, Propiedad } from "../models/index.js"
+import { Precio, Categoria, Propiedad,Usuario } from "../models/index.js"
 import { Sequelize } from 'sequelize'
 
 const inicio = async (req, res) => {
@@ -15,6 +15,11 @@ const inicio = async (req, res) => {
                 {
                     model: Precio,
                     as: 'precio'
+                },
+                {
+                    model:Usuario,
+                    as:'usuario',
+                    attributes: ['fotoPerfil', 'alias'],
                 }
             ],
             order: [
@@ -30,6 +35,11 @@ const inicio = async (req, res) => {
                 {
                     model: Precio,
                     as: 'precio'
+                },
+                {
+                    model:Usuario,
+                    as:'usuario',
+                    attributes: ['fotoPerfil', 'alias'],
                 }
             ],
             order: [
@@ -37,6 +47,7 @@ const inicio = async (req, res) => {
             ]
         })
     ])
+    
 
     res.render('inicio', {
         pagina: 'Inicio',
@@ -44,7 +55,7 @@ const inicio = async (req, res) => {
         precios,
         casas,
         departamentos,
-        csrfToken: req.csrfToken()
+        csrfToken: req.csrfToken(),
     })
 }
 
