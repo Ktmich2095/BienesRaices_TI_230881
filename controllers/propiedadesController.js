@@ -1,3 +1,4 @@
+
 import { validationResult } from 'express-validator'
 import { Precio, Categoria, Propiedad, Mensaje, Usuario } from '../models/index.js'
 import { unlink } from 'node:fs/promises'
@@ -430,11 +431,11 @@ const enviarMensaje = async (req, res) => {
 
 const verMisMensajes = async (req, res) => {
     if (!req.usuario) {
-        // Si no hay usuario en la sesión, redirigir a la página de login
-        return res.redirect('/login'); // Asegúrate de tener la ruta de login configurada
+        
+        return res.redirect('/login');
     }
 
-    const { id } = req.usuario; // Ahora puedes acceder a `id` sin problemas
+    const { id } = req.usuario; 
 
     try {
         // Obtener los mensajes enviados por el usuario
@@ -445,18 +446,19 @@ const verMisMensajes = async (req, res) => {
             include: [
                 {
                     model: Propiedad, // Obtener la propiedad asociada al mensaje
-                    as: 'propiedade', // Asumiendo que la relación con la propiedad es 'propiedad'
+                    as: 'propiedade', // Asumiendo que la relación con la propiedad es 'propiedade'
                     attributes: ['titulo'], // Solo mostrar el título de la propiedad
                 },
                 {
-                    model:Usuario,
-                    as:'usuario',
-                    attributes:['alias','fotoPerfil']
+                    model: Usuario,
+                    as: 'usuario',
+                    attributes: ['alias', 'fotoPerfil']
                 }
             ],
         });
+
         res.render('propiedades/mis-mensajes', { // Usamos una nueva vista 'mis-mensajes'
-            mensajes,
+            mensajes, // Aquí pasamos todos los mensajes
             csrfToken: req.csrfToken(), // Token CSRF para seguridad
             pagina: 'Mis Mensajes', // Título de la página
             formatearFecha,
@@ -466,6 +468,7 @@ const verMisMensajes = async (req, res) => {
         res.redirect('/500'); // Redirige a una página de error en caso de problemas
     }
 };
+
 
 
 

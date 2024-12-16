@@ -3,18 +3,22 @@ extends ../layout/admin
 block styles
     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css")
     meta(name="csrf-token" content= csrfToken)
+
 block contenido
     .py-10
-        h1.text-4xl.my-10.font-extrabold.text-center Bienes
-            span.font-normal Raíces  
-        h2.text-center.text-2xl= pagina
+        h1.text-4xl.my-10.font-extrabold.text-center.text-darkCyan Bienes
+            span.font-normal.text-black Raíces  
+        h2.text-center.text-2xl.text-black= pagina
 
-        div(class="bg-white shadow py-8 px-4 rounded mx-auto max-w-4xl my-10 md:px-10")
-            form(id="imagen" class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center items-center" method="POST" data-context="propiedad" action=`/propiedades/agregar-imagen/${propiedad.id}`)
+        div(class="bg-white shadow-xl py-8 px-6 rounded-lg mx-auto max-w-4xl my-10 md:px-10")
+            form(id="imagen" class="dropzone border-dashed border-2 border-gray-300 w-full min:h-96 h-auto rounded-lg flex flex-col justify-center items-center text-center text-gray-500" method="POST" data-context="propiedad" action=`/propiedades/agregar-imagen/${propiedad.id}`)
                 input(type="hidden" name="_csrf" value= csrfToken)
-                
 
-            button(id="publicar" class="mt-5 w-full py-3 bg-darkCyan hover:bg-cerulean rounded text-white font-bold uppercase cursor-pointer" type="button") Publicar Propiedad   
+
+                .dz-message.text-lg.text-gray-500
+                    p.mb-3  Arrastra aquí tus imagenes
+
+            button(id="publicar" class="mt-6 w-full py-3 bg-darkCyan hover:bg-cerulean rounded-lg text-white font-bold uppercase cursor-pointer transition-all transform hover:scale-105" type="button") Publicar Propiedad   
 
 block scripts 
     script(src="/js/agregarImagen.js")

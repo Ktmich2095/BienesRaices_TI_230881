@@ -3,35 +3,35 @@ extends ../layout/admin
 block contenido
     h2(class="text-2xl font-extrabold text-center my-10")= pagina
 
-    a(href="/mis-propiedades" class="rounded py-2 px-10 bg-darkCyan hover-bg-cerulean text-sm font-bold text-center text-white uppercase my-5 inline-block w-full sm:w-auto") Volver
+    a(href="/mis-propiedades" class="rounded py-2 px-10 bg-darkCyan hover:bg-cerulean text-sm font-bold text-center text-white uppercase my-5 inline-block w-full sm:w-auto") Volver
 
     div(class="mx-auto max-w-4xl bg-white shadow")
-
-        if mensajes.length 
-            ul 
-                each mensaje in mensajes 
-                    li(class="border-gray-200 border-b p-5 flex items-center space-x-4")
-                        img(class="rounded-full w-14 h-14" src=`/uploads/${mensaje.usuario.fotoPerfil}` alt=`Foto de perfil del usuario ${mensaje.usuario.alias}`)
-                        div(class="flex flex-col")  
+        // Verifica si existen mensajes
+        if mensajes && mensajes.length
+            ul
+                each mensaje in mensajes
+                    li(class="border-b border-gray-200 p-5 flex items-center space-x-4")
+                        img(class="rounded-full w-14 h-14" src=`/uploads/${mensaje.usuario.fotoPerfil}` alt=`Foto de perfil de ${mensaje.usuario.alias}`)
+                        div(class="flex flex-col w-full")
                             p(class="font-bold text-gray-800") Nombre: 
                                 span(class="font-normal")= mensaje.usuario.nombre
-                                
                             p(class="font-bold text-gray-800") Email: 
-                                span(class="font-normal")= mensaje.usuario.email    
-
+                                span(class="font-normal")= mensaje.usuario.email
                             p(class="font-bold text-gray-800") Mensaje: 
                                 span(class="font-normal")= mensaje.mensaje
-
                             p(class="font-bold text-gray-800") Enviado: 
-                                span(class="font-normal")= formatearFecha( mensaje.createdAt ) 
+                                span(class="font-normal")= formatearFecha(mensaje.createdAt)
+
+                        // Si ya hay una respuesta, mostrarla
                         if mensaje.respuesta
                             div(class="mt-4")
                                 p(class="font-bold text-green-600") Respuesta:
                                 span(class="font-normal")= mensaje.respuesta
                         else
+                            // Formulario de respuesta si no hay respuesta aún
                             form(action=`/mensajes/responder/${mensaje.id}` method="POST" class="mt-4")
                                 input(type="hidden", name="_csrf", value=csrfToken)
-                                textarea(name="respuesta" rows="3" class="w-full border border-gray-300 rounded-lg p-2" placeholder="Escribe tu respuesta aquí...").required
+                                textarea(name="respuesta" rows="3" class="w-full border border-gray-300 rounded-lg p-2" placeholder="Escribe tu respuesta aquí..." required)
                                 button(type="submit" class="bg-darkCyan text-white px-4 py-2 rounded mt-2") Responder
         else 
-            p(class="text-center text-gray-600 p-5") No hay Mensajes   
+            p(class="text-center text-gray-600 p-5") No hay Mensajes
