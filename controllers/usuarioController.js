@@ -168,14 +168,6 @@ const registrar = async (req, res) => {
         fotoPerfil,
         token: generateID(),
     })
-
-    //Enviar email de confirmacion
-    emailRegistro({
-        nombre: usuario.nombre,
-        email: usuario.email,
-        token: usuario.token
-    })
-
     res.redirect(`/auth/fotoPerfil/${usuario.id}`);
     //Mostrar mensaje de confirmación
     
@@ -198,12 +190,11 @@ const subirFoto = async (req,res)=>{
     res.render('auth/agregar-foto', {
         pagina:'Agregar foto de perfil',
         csrfToken:req.csrfToken(),
-        usuario
-    })
-    emailRegistro({
-        nombre: usuario.nombre,
-        email: usuario.email,
-        token: usuario.token
+        usuario,
+        mensaje: 'Después de subir tu foto, te enviaremos un correo a: ',
+        correo: usuario.email,
+        mensajeDos: ' Sigue los pasos para confirmar tu cuenta'
+
     })
 }
 
