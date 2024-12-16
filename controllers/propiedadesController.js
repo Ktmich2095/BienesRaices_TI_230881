@@ -455,7 +455,6 @@ const verMisMensajes = async (req, res) => {
                 }
             ],
         });
-
         res.render('propiedades/mis-mensajes', { // Usamos una nueva vista 'mis-mensajes'
             mensajes,
             csrfToken: req.csrfToken(), // Token CSRF para seguridad
