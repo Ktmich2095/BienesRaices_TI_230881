@@ -1,3 +1,4 @@
+
 import { validationResult } from 'express-validator'
 import { Precio, Categoria, Propiedad, Mensaje, Usuario } from '../models/index.js'
 import { unlink } from 'node:fs/promises'
@@ -353,7 +354,12 @@ const mostrarPropiedad = async (req, res) => {
     const propiedad = await Propiedad.findByPk(id, {
         include: [
             { model: Precio, as: 'precio' },
-            { model: Categoria, as: 'categoria' }
+            { model: Categoria, as: 'categoria' },
+            {
+                model: Usuario,
+                as: 'usuario',
+                attributes: ['fotoPerfil', 'alias'], // Incluye sólo estos campos
+            },
         ]
     })
 
@@ -371,87 +377,162 @@ const mostrarPropiedad = async (req, res) => {
 }
 
 const enviarMensaje = async (req, res) => {
+    const { id } = req.params;
 
-    const { id } = req.params
-
-    //Comprobar que la propieadad exista
-
+    // Comprobar que la propiedad exista
     const propiedad = await Propiedad.findByPk(id, {
         include: [
             { model: Precio, as: 'precio' },
-            { model: Categoria, as: 'categoria' }
-        ]
-    })
+            { model: Categoria, as: 'categoria' },
+            {
+                model: Usuario,
+                as: 'usuario',
+                attributes: ['fotoPerfil', 'alias'], // Incluye sólo estos campos
+            },
+        ],
+    });
 
     if (!propiedad) {
-        return res.redirect('/404')
+        return res.redirect('/404');
     }
 
-
-    //renderizar errores
-
-    //Validacion
-    let resultado = validationResult(req)
+    // Validación de errores
+    let resultado = validationResult(req);
 
     if (!resultado.isEmpty()) {
-
         return res.render('propiedades/mostrar', {
             propiedad,
             pagina: propiedad.titulo,
-            csrfToken: req.csrfToken(),
+            csrfToken: req.csrfToken(), // Asegúrate de pasar el token CSRF aquí
             usuario: req.usuario,
             esVendedor: esVendedor(req.usuario?.id, propiedad.usuarioID),
-            errores: resultado.array()
-        })
+            errores: resultado.array(),
+        });
     }
 
+    const { mensaje } = req.body;
+    const { id: propiedadID } = req.params;
+    const { id: usuarioID } = req.usuario;
 
-    const { mensaje } = req.body
-    const { id: propiedadID } = req.params
-    const { id: usuarioID } = req.usuario
-    //Almacenar el mensaje
-
-    await Mensaje.create({
-        mensaje,
-        propiedadID,
-        usuarioID
-    })
-
-    res.redirect('/')
-}
-
+    // Almacenar el mensaje
+    try {
+        await Mensaje.create({
+            mensaje,
+            propiedadID,
+            usuarioID,
+        });
+        res.redirect('/');
+    } catch (error) {
+        console.error(error);
+        res.redirect('/500'); // Página de error en caso de falla
+    }
+};
 //Leer mensajes recibidos
 
-const verMensajes = async (req, res) => {
-    const { id } = req.params
+const verMisMensajes = async (req, res) => {
+    if (!req.usuario) {
+        
+        return res.redirect('/login');
+    }
 
-    //validar que la propiedad exista
+    const { id } = req.usuario; 
+
+    try {
+        // Obtener los mensajes enviados por el usuario
+        const mensajes = await Mensaje.findAll({
+            where: {
+                usuarioID: id, // Filtramos los mensajes del usuario
+            },
+            include: [
+                {
+                    model: Propiedad, // Obtener la propiedad asociada al mensaje
+                    as: 'propiedade', // Asumiendo que la relación con la propiedad es 'propiedade'
+                    attributes: ['titulo'], // Solo mostrar el título de la propiedad
+                },
+                {
+                    model: Usuario,
+                    as: 'usuario',
+                    attributes: ['alias', 'fotoPerfil']
+                }
+            ],
+        });
+
+        res.render('propiedades/mis-mensajes', { // Usamos una nueva vista 'mis-mensajes'
+            mensajes, // Aquí pasamos todos los mensajes
+            csrfToken: req.csrfToken(), // Token CSRF para seguridad
+            pagina: 'Mis Mensajes', // Título de la página
+            formatearFecha,
+        });
+    } catch (error) {
+        console.error(error);
+        res.redirect('/500'); // Redirige a una página de error en caso de problemas
+    }
+};
+
+
+
+
+const verMensajes = async (req, res) => {
+    const { id } = req.params;
+
+    // Validar que la propiedad exista
     const propiedad = await Propiedad.findByPk(id, {
         include: [
             {
                 model: Mensaje, as: 'mensajes',
                 include: [
-                    { model: Usuario.scope('eliminarPassword'), as: 'usuario' }
-                ]
+                    { model: Usuario.scope('eliminarPassword'), as: 'usuario' },
+                ],
             },
         ],
-    })
+    });
 
     if (!propiedad) {
-        return res.redirect('/mis-propiedades')
+        return res.redirect('/mis-propiedades');
     }
 
-    //Revisar quin visita la URL sea dueño de la propeidd
+    // Revisar que quien visita la URL sea dueño de la propiedad
     if (propiedad.usuarioID.toString() !== req.usuario.id.toString()) {
-        return res.redirect('/mis-propiedades')
+        return res.redirect('/mis-propiedades');
     }
 
     res.render('propiedades/mensajes', {
         pagina: 'Mensajes',
         mensajes: propiedad.mensajes,
-        formatearFecha
-    })
-}
+        csrfToken: req.csrfToken(), // Asegúrate de pasar el token CSRF aquí
+        formatearFecha,
+    });
+};
+const responderMensaje = async (req, res) => {
+    const { id } = req.params;
+    const { respuesta } = req.body;
+
+    // Buscar el mensaje por ID
+    const mensaje = await Mensaje.findByPk(id);
+
+    if (!mensaje) {
+        return res.redirect('/404');
+    }
+
+    // Validar que el usuario tenga permiso para responder (dueño de la propiedad)
+    const propiedad = await Propiedad.findByPk(mensaje.propiedadID);
+
+    if (!propiedad || propiedad.usuarioID.toString() !== req.usuario.id.toString()) {
+        return res.redirect('/mis-propiedades');
+    }
+
+    // Guardar la respuesta
+    mensaje.respuesta = respuesta;
+
+    try {
+        await mensaje.save();
+        res.redirect(`/mensajes/${propiedad.id}`); // Regresar a la lista de mensajes
+    } catch (error) {
+        console.error(error);
+        res.redirect('/500'); // Página de error
+    }
+};
+
 
 export {
     admin,
@@ -465,6 +546,8 @@ export {
     mostrarPropiedad,
     enviarMensaje,
     verMensajes,
-    cambiarEstado
+    cambiarEstado,
+    responderMensaje,
+    verMisMensajes
 }
 

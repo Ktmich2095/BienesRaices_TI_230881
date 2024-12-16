@@ -10,10 +10,12 @@
     //Filtros
     const filtros = {
         categoria: '',
-        precio: ''
+        precio: '',
+        transaccion:''
     }
     const categoriasSelect = document.querySelector('#categorias');
     const preciosSelect = document.querySelector('#precios');
+    const transaccionSelect = document.querySelector('#transaccion')
 
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -29,6 +31,11 @@
 
     preciosSelect.addEventListener('change', e => {
         filtros.precio = +e.target.value
+        filtrarPropiedades();
+    })
+
+    transaccionSelect.addEventListener('change', e => {
+        filtros.transaccion = e.target.value
         filtrarPropiedades();
     })
 
@@ -72,9 +79,14 @@
     }
 
     const filtrarPropiedades = () => {
-        const resultado = propiedades.filter(filtrarCategoria).filter(filtrarPrecio)
+        const resultado = propiedades.filter(filtrarCategoria).filter(filtrarPrecio).filter(filtrarTransaccion)
         mostrarPropiedades(resultado)
     }
+
+    const filtrarTransaccion = (propiedad) => {
+        return filtros.transaccion ? propiedad.transaccion === filtros.transaccion : propiedad;
+    };
+    
 
     const filtrarCategoria = (propiedad) => {
         return filtros.categoria ? propiedad.categoriaID === filtros.categoria : propiedad
