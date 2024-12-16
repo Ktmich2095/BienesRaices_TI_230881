@@ -141,7 +141,6 @@ const registrar = async (req, res) => {
                 birthDate: req.body.birthDate
             }
         })
-        
     }
 
     const aliasExistente = await Usuario.findOne({where:{alias}})
