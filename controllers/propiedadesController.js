@@ -3,9 +3,14 @@ import { validationResult } from 'express-validator'
 import { Precio, Categoria, Propiedad, Mensaje, Usuario } from '../models/index.js'
 import { unlink } from 'node:fs/promises'
 import { esVendedor, formatearFecha } from '../helpers/index.js'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
 
 const admin = async (req, res) => {
-
+    const token = req.cookies._token
+    if(!token){
+        return res.redirect('auth/login')
+    }
     //Leer QueryString
     const { pagina: paginaActual } = req.query
     const expresion = /^[0-9]$/
@@ -15,6 +20,11 @@ const admin = async (req, res) => {
     }
 
     try {
+        const decoded = jwt.verify(token,process.env.JWT_SECRET)
+        const usuario =await Usuario.findByPk(decoded.id)
+        if(!usuario){
+            return res.redirect('/auth/login')
+        }
         const { id } = req.usuario
 
         //Limites y Dffset para el paginador
@@ -42,7 +52,7 @@ const admin = async (req, res) => {
         ])
         console.log(total)
         res.render('propiedades/admin', {
-            pagina: 'Mis propiedades',
+            pagina: `Bienvenido a tus propiedades, ${usuario.nombre}`,
             propiedades,
             csrfToken: req.csrfToken(),
             paginas: Math.ceil(total / limit),

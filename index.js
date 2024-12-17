@@ -9,6 +9,7 @@ import db from './config/db.js'
 
 
 
+
 //crear la app
 const app = express()
 
