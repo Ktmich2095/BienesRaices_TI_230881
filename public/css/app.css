@@ -984,9 +984,6 @@ video {
 .font-semibold {
   font-weight: 600;
 }
-.font-black {
-  font-weight: 900;
-}
 .uppercase {
   text-transform: uppercase;
 }
@@ -1233,10 +1230,6 @@ video {
 
   .md\:flex {
     display: flex;
-  }
-
-  .md\:w-1\/2 {
-    width: 50%;
   }
 
   .md\:w-1\/3 {
