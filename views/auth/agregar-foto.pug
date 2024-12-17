@@ -5,8 +5,8 @@ block styles
     meta(name="csrf-token" content= csrfToken)
 block contenido
     .py-10
-        h1.text-4xl.my-10.font-extrabold.text-center.text-action Bienes
-            span.font-normal Raíces  
+        h1.text-4xl.my-10.font-extrabold.text-center.text-action.text-darkCyan Bienes
+            span.font-normal.text-black Raíces  
         h2.text-center.text-2xl.text-secondaryText= pagina
 
         p.text-xl-font-bold.text-center.my-10.text-red-700= mensaje
@@ -16,7 +16,7 @@ block contenido
         div(class="bg-formBackground shadow py-8 px-4 rounded mx-auto max-w-4xl my-10 md:px-10")
             form(id="imagen" class="dropzone border-dashed border-2 w-full min:h-96 h-auto rounded flex-col justify-center items-center" method="POST" action=`/auth/fotoPerfil/${usuario.id}` data-context="registro")
                 input(type="hidden" name="_csrf" value= csrfToken)
-            button(class=" mt-5 w-full py-3 bg-darkCyan hover:bg-midnightGreen rounded text-white font-bold uppercase cursor-pointer" type="button" id="publicar") Subir foto de Perfil    
+            button(class=" mt-6 w-full py-3 bg-darkCyan hover:bg-cerulean rounded-lg text-white font-bold uppercase cursor-pointer transition-all transform hover:scale-105" type="button" id="publicar") Subir foto de Perfil    
 
 
 block scripts 
